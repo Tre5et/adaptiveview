@@ -34,7 +34,6 @@ public class ServerTickHandler {
 
             if(tickCounter == Config.getUpdateInterval()) {
                 tickCounter = 0;
-                DynViewMod.LOGGER.info(String.valueOf(MathTools.longArrayAverage(tickLengths.toArray(new Long[0]))));
                 ViewDistanceHandler.updateViewDistance(MathTools.longArrayAverage(tickLengths.toArray(new Long[0])));
                 tickLengths.clear();
             }

@@ -8,7 +8,7 @@ import net.treset.dynview.tools.MinecraftServerInstance;
 public class ViewDistanceHandler {
 
     public static void updateViewDistance(long averageTicks) {
-        if(Config.isLocked()) return;
+        if(Config.getLocked() != 0) return;
         if(averageTicks / 1000000 > Config.getMaxMspt()) {
             if(averageTicks / 1000000 > Config.getMaxMsptAggressive()) {
                 addViewDitance(-2);

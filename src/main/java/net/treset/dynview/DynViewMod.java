@@ -1,8 +1,10 @@
 package net.treset.dynview;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.treset.dynview.commands.CommandHandler;
 import net.treset.dynview.distance.ServerTickHandler;
 import net.treset.dynview.tools.MinecraftServerInstance;
 import org.slf4j.Logger;
@@ -16,11 +18,10 @@ public class DynViewMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
 
-		LOGGER.info("Hello Fabric world!");
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			CommandHandler.registerCommands(dispatcher, environment);
+		});
 
 		ServerLifecycleEvents.SERVER_STARTED.register(MinecraftServerInstance::setInstance);
 		ServerTickEvents.END_SERVER_TICK.register(ServerTickHandler::onTick);

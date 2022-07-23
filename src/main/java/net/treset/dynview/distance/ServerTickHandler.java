@@ -4,6 +4,7 @@ import net.minecraft.server.MinecraftServer;
 import net.treset.dynview.DynViewMod;
 import net.treset.dynview.config.Config;
 import net.treset.dynview.tools.MathTools;
+import net.treset.dynview.unlocking.LockManager;
 
 import java.util.*;
 
@@ -13,6 +14,8 @@ public class ServerTickHandler {
     private static final List<Long> tickLengths = new ArrayList<>();
 
     public static void onTick(MinecraftServer server) {
+        LockManager.onTick();
+
 
         tickCounter++;
 

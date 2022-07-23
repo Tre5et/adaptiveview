@@ -1,7 +1,7 @@
 package net.treset.dynview.config;
 
 public class Config {
-    private static boolean locked = false;
+    private static int locked = 0;
     private static int updateInterval = 7;
     private static int minMspt = 4;
     private static int maxMspt = 5;
@@ -10,7 +10,7 @@ public class Config {
     private static int minViewDistance = 4;
     private static int maxViewDistance = 20;
 
-    public static boolean isLocked() {
+    public static int getLocked() {
         return locked;
     }
 
@@ -42,7 +42,7 @@ public class Config {
         return maxViewDistance;
     }
 
-    public static void setLocked(boolean locked) {
+    public static void setLocked(int locked) {
         Config.locked = locked;
     }
 

@@ -5,6 +5,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
+import net.treset.dynview.tools.TextTools;
 
 public class ViewDistanceLocker {
     private final LockReason lockReason;
@@ -36,17 +37,17 @@ public class ViewDistanceLocker {
             this.remainingTime--;
             if(this.remainingTime <= 0) {
                 LockManager.finishUnlocker(this);
-                ctx.getSource().sendFeedback(Text.literal(String.format("Cleared view distance lock of %s chunks after %s ticks", this.getDistance(), this.getTimeout())), true);
+                TextTools.replyFormatted(ctx, String.format("?aCleared view distance lock of ?B%s chunks?B after ?B%s ticks", this.getDistance(), this.getTimeout()), true);
             }
         } else if(this.getUnlockReason() == LockReason.PLAYER_DISCONNECT) {
              if(this.player.isDisconnected()) {
                  LockManager.finishUnlocker(this);
-                 ctx.getSource().sendFeedback(Text.literal(String.format("Cleared view distance lock of %s chunks after player %s disconnected", this.getDistance(), this.player.getName().getString())), true);
+                 TextTools.replyFormatted(ctx, String.format("?aCleared view distance lock of ?B%s chunks?B after ?Bplayer %s disconnected", this.getDistance(), this.player.getName().getString()), true);
              }
         } else if(this.getUnlockReason() == LockReason.PLAYER_MOVE) {
             if(this.player.isDisconnected() || this.player.getPos() != this.startPos) {
                 LockManager.finishUnlocker(this);
-                ctx.getSource().sendFeedback(Text.literal(String.format("Cleared view distance lock of %s chunks after player %s moved", this.getDistance(), this.player.getName().getString())), true);
+                TextTools.replyFormatted(ctx, String.format("?aCleared view distance lock of ?B%s chunks?B after ?Bplayer %s moved", this.getDistance(), this.player.getName().getString()), true);
             }
         }
     }

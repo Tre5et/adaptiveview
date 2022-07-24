@@ -8,6 +8,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.treset.dynview.distance.ViewDistanceHandler;
+import net.treset.dynview.tools.TextTools;
 
 public class CommandHandler {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandManager.RegistrationEnvironment environment) {
@@ -73,11 +74,11 @@ public class CommandHandler {
                                         )
                                 )
                         )
-                        .then(CommandManager.literal("clear")
-                                .executes(LockCommands::clear)
-                        )
                         .then(CommandManager.literal("unlock")
                                 .executes(LockCommands::unlock)
+                                .then(CommandManager.literal("clear")
+                                        .executes(LockCommands::clear)
+                                )
                         )
                 )
         );
@@ -88,7 +89,7 @@ public class CommandHandler {
     }
 
     private static int dynview(CommandContext<ServerCommandSource> ctx) {
-        ctx.getSource().sendFeedback(Text.literal(String.format("The current view distance is %s chunks", ViewDistanceHandler.getViewDistance())), true);
+        TextTools.replyFormatted(ctx, String.format("?iThe current view distance is ?B%s chunks", ViewDistanceHandler.getViewDistance()), true);
         return 1;
     }
 }

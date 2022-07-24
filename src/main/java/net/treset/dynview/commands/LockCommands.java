@@ -7,7 +7,9 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.treset.dynview.config.Config;
+import net.treset.dynview.tools.TextTools;
 import net.treset.dynview.unlocking.LockManager;
 import net.treset.dynview.unlocking.LockReason;
 import net.treset.dynview.unlocking.ViewDistanceLocker;
@@ -19,30 +21,30 @@ public class LockCommands {
         int lockedManually = LockManager.isLockedManually();
 
         if(Config.getLocked() == 0) {
-            ctx.getSource().sendFeedback(Text.literal("The view distance is currently unlocked"), true);
+            TextTools.replyFormatted(ctx, "?iThe view distance is ?Bunlocked", false);
             return 1;
         }
 
         if(lockedManually > 0) {
             if(numLockers > 0) {
-                ctx.getSource().sendFeedback(Text.literal(String.format("The view distance is manually locked to %s chunks and there %s %s %s queued", lockedManually, (numLockers > 1)? "are" : "is", numLockers, (numLockers > 1)? "lockers" : "locker")), true);
-            } else ctx.getSource().sendFeedback(Text.literal(String.format("The view distance is manually locked to %s chunks", lockedManually)), true);
+                TextTools.replyFormatted(ctx, String.format("?iThe view distance is manually locked to ?B%s chunks?B and there %s ?B%s %s?B queued", lockedManually, (numLockers > 1)? "are" : "is", numLockers, (numLockers > 1)? "lockers" : "locker"), false);
+            } else TextTools.replyFormatted(ctx, String.format("?iThe view distance is manually locked to ?B%s chunks", lockedManually), false);
             return 1;
         }
 
         if(currentLocker != null) {
             if(numLockers > 1) {
-                ctx.getSource().sendFeedback(Text.literal(String.format("The view distance is locked to %s chunks %s and %s other %s active", currentLocker.getDistance(), currentLocker.getReasonString(), numLockers - 1, (numLockers > 2)? "lockers are" : "locker is")), true);
-            } else  ctx.getSource().sendFeedback(Text.literal(String.format("The view distance is locked to %s chunks %s", currentLocker.getDistance(), currentLocker.getReasonString())), true);
+                TextTools.replyFormatted(ctx, String.format("?iThe view distance is locked to ?B%s chunks?B %s and ?B%s other %s?B active", currentLocker.getDistance(), currentLocker.getReasonString(), numLockers - 1, (numLockers > 2)? "lockers are" : "locker is"), false);
+            } else  TextTools.replyFormatted(ctx, String.format("?iThe view distance is locked to ?B%s chunks?B %s", currentLocker.getDistance(), currentLocker.getReasonString()), false);
             return 1;
         }
 
-        ctx.getSource().sendFeedback(Text.literal(String.format("The view distance is currently locked to %s chunks", Config.getLocked())), true);
+        TextTools.replyFormatted(ctx, String.format("?iThe view distance is currently locked to ?B%s chunks", Config.getLocked()), false);
         return 1;
     }
 
     public static int set(CommandContext<ServerCommandSource> ctx) {
-        ctx.getSource().sendFeedback(Text.literal("Locks the view distance to the provided chunks"), true);
+        TextTools.replyFormatted(ctx, "?i?ILocks the view distance to the provided chunks", false);
         return 1;
     }
 
@@ -51,12 +53,12 @@ public class LockCommands {
 
         LockManager.lockManually(chunks);
 
-        ctx.getSource().sendFeedback(Text.literal(String.format("Locked the view distance to %s chunks", chunks)), true);
+        TextTools.replyFormatted(ctx, String.format("?gLocked the view distance to ?B%s chunks", chunks), true);
         return 1;
     }
 
     public static int setChunksTimeout(CommandContext<ServerCommandSource> ctx) {
-        ctx.getSource().sendFeedback(Text.literal("The view distance will be unlocked after the provided amount of ticks"), true);
+        TextTools.replyFormatted(ctx, "?i?IThe view distance will be unlocked after the provided amount of ticks", false);
         return 1;
     }
 
@@ -66,12 +68,12 @@ public class LockCommands {
 
         LockManager.addUnlocker(new ViewDistanceLocker(LockReason.TIMEOUT, chunks, ticks, null, ctx));
 
-        ctx.getSource().sendFeedback(Text.literal(String.format("Locked the view distance to %s chunks for %s ticks", chunks, ticks)), true);
+        TextTools.replyFormatted(ctx, String.format("?gLocked the view distance to ?B%s chunks?B for ?B%s ticks", chunks, ticks), true);
         return 1;
     }
 
     public static int setChunksPlayer(CommandContext<ServerCommandSource> ctx) {
-        ctx.getSource().sendFeedback(Text.literal("The view distance will be unlocked after the provided player disconnects or moves"), true);
+        TextTools.replyFormatted(ctx, "?i?IThe view distance will be unlocked after the provided player disconnects or moves", false);
         return 1;
     }
 
@@ -81,14 +83,14 @@ public class LockCommands {
         try {
             player = EntityArgumentType.getPlayer(ctx, "player");
         } catch (CommandSyntaxException e) {
-            ctx.getSource().sendError(Text.literal("Cannot parse the provided player"));
+            TextTools.replyError(ctx, "Cannot parse the provided player");
             e.printStackTrace();
             return 0;
         }
 
         LockManager.addUnlocker(new ViewDistanceLocker(LockReason.PLAYER_DISCONNECT, chunks, -1, player, ctx));
 
-        ctx.getSource().sendFeedback(Text.literal(String.format("Locked the view distance to %s chunks until player %s disconnects", chunks, player.getName().getString())), true);
+        TextTools.replyFormatted(ctx, String.format("?gLocked the view distance to ?B%s chunks?B until ?Bplayer %s disconnects", chunks, player.getName().getString()), true);
         return 1;
     }
 
@@ -98,34 +100,14 @@ public class LockCommands {
         try {
             player = EntityArgumentType.getPlayer(ctx, "player");
         } catch (CommandSyntaxException e) {
-            ctx.getSource().sendError(Text.literal("Cannot parse the provided player"));
+            TextTools.replyError(ctx, "Cannot parse the provided player");
             e.printStackTrace();
             return 0;
         }
 
         LockManager.addUnlocker(new ViewDistanceLocker(LockReason.PLAYER_MOVE, chunks, -1, player, ctx));
 
-        ctx.getSource().sendFeedback(Text.literal(String.format("Locked the view distance to %s chunks until player %s moves", chunks, player.getName().getString())), true);
-        return 1;
-    }
-
-    public static int clear(CommandContext<ServerCommandSource> ctx) {
-        int numLocks = LockManager.getNumUnlockers();
-        int lockedManually = LockManager.isLockedManually();
-
-        if(numLocks == 0) {
-            ctx.getSource().sendFeedback(Text.literal("No unlockers are queued to clear"), true);
-            return 1;
-        }
-
-        LockManager.clear();
-
-        if(lockedManually > 0 && numLocks > 0) {
-            ctx.getSource().sendFeedback(Text.literal(String.format("Cleared %s unlockers but view distance is still manually locked to %s chunks", numLocks, lockedManually)), true);
-            return 1;
-        }
-
-        ctx.getSource().sendFeedback(Text.literal(String.format("Cleared %s unlockers", numLocks)), true);
+        TextTools.replyFormatted(ctx, String.format("?gLocked the view distance to ?B%s chunks?B until ?Bplayer %s moves", chunks, player.getName().getString()), true);
         return 1;
     }
 
@@ -134,17 +116,44 @@ public class LockCommands {
         int lockedManually = LockManager.isLockedManually();
 
         if(lockedManually == 0) {
-            ctx.getSource().sendFeedback(Text.literal("The view distance isn't manually locked"), true);
+            TextTools.replyFormatted(ctx, "?pThe view distance isn't manually locked", true);
+            return 1;
         }
 
         LockManager.unlockManually();
 
         if(lockedManually > 0 && numLocks > 0) {
-            ctx.getSource().sendFeedback(Text.literal(String.format("Unlocked manually but there %s still %s %s active", (numLocks > 1)? "are" : "is", numLocks, (numLocks > 1)? "lockers": "locker")), true);
+            TextTools.replyFormatted(ctx, String.format("?g?BUnlocked?B the view distance but there %s still ?B%s %s?B active", (numLocks > 1)? "are" : "is", numLocks, (numLocks > 1)? "lockers": "locker"), true);
             return 1;
         }
 
-        ctx.getSource().sendFeedback(Text.literal("Unlocked the view distance"), true);
+        TextTools.replyFormatted(ctx, "?g?BUnlocked?B the view distance", true);
+        return 1;
+    }
+
+    public static int clear(CommandContext<ServerCommandSource> ctx) {
+        int numLocks = LockManager.getNumUnlockers();
+        int lockedManually = LockManager.isLockedManually();
+
+        if(numLocks == 0 && lockedManually == 0) {
+            TextTools.replyFormatted(ctx, "?pNothing to unlock and no lockers to clear", true);
+            return 1;
+        }
+
+        LockManager.clear();
+        LockManager.unlockManually();
+
+        if(lockedManually > 0 && numLocks > 0) {
+            TextTools.replyFormatted(ctx, String.format("?g?BUnlocked?B the view distance and ?Bcleared %s %s", numLocks, (numLocks > 1)? "lockers" : "locker"), true);
+            return 1;
+        }
+
+        if(lockedManually > 0) {
+            TextTools.replyFormatted(ctx, "?g?BUnlocked?B the view distance", true);
+            return 1;
+        }
+
+        TextTools.replyFormatted(ctx, String.format("?g?BCleared %s %s", numLocks, (numLocks > 1)? "lockers" : "locker"), true);
         return 1;
     }
 }

@@ -1,13 +1,10 @@
-package net.treset.dynview.commands;
+package net.treset.adaptiveview.commands;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.treset.dynview.config.Config;
-import net.treset.dynview.tools.TextTools;
+import net.treset.adaptiveview.config.Config;
+import net.treset.adaptiveview.tools.TextTools;
 
 public class ConfigCommands {
     public static int base(CommandContext<ServerCommandSource> ctx) {

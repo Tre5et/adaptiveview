@@ -1,7 +1,7 @@
-package net.treset.dynview.unlocking;
+package net.treset.adaptiveview.unlocking;
 
-import net.treset.dynview.config.Config;
-import net.treset.dynview.distance.ViewDistanceHandler;
+import net.treset.adaptiveview.config.Config;
+import net.treset.adaptiveview.distance.ViewDistanceHandler;
 
 import java.util.ArrayList;
 import java.util.List;

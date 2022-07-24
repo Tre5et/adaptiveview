@@ -1,4 +1,4 @@
-package net.treset.dynview.commands;
+package net.treset.adaptiveview.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -6,14 +6,13 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-import net.treset.dynview.distance.ViewDistanceHandler;
-import net.treset.dynview.tools.TextTools;
+import net.treset.adaptiveview.distance.ViewDistanceHandler;
+import net.treset.adaptiveview.tools.TextTools;
 
 public class CommandHandler {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandManager.RegistrationEnvironment environment) {
         if(!environment.dedicated) return;
-        dispatcher.register(CommandManager.literal("dynview")
+        dispatcher.register(CommandManager.literal("adaptiveview")
                 .requires(source -> source.hasPermissionLevel(2))
                 .executes(CommandHandler::dynview)
                 .then(CommandManager.literal("config")

@@ -1,13 +1,13 @@
-package net.treset.dynview;
+package net.treset.adaptiveview;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.treset.dynview.commands.CommandHandler;
-import net.treset.dynview.config.Config;
-import net.treset.dynview.distance.ServerTickHandler;
-import net.treset.dynview.tools.MinecraftServerInstance;
+import net.treset.adaptiveview.commands.CommandHandler;
+import net.treset.adaptiveview.config.Config;
+import net.treset.adaptiveview.distance.ServerTickHandler;
+import net.treset.adaptiveview.tools.MinecraftServerInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

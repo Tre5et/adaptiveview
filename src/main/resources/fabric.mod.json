@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "id": "dynview",
+  "id": "adaptiveview",
   "version": "${version}",
 
-  "name": "DynView",
+  "name": "AdaptiveView",
   "description": "Mod for dynamically adjusting the servers view distance based on performance.",
   "authors": [
     "TreSet"
   ],
   "contact": {
-    "homepage": "https://github.com/Tre5et/dynview/releases",
-    "sources": "https://github.com/Tre5et/dynview"
+    "homepage": "https://github.com/Tre5et/adaptiveview/releases",
+    "sources": "https://github.com/Tre5et/adaptiveview"
   },
 
   "license": "GPL-3.0",
-  "icon": "assets/dynview/icon.png",
+  "icon": "assets/adaptiveview/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.treset.dynview.DynViewMod"
+      "net.treset.adaptiveview.DynViewMod"
     ]
   },
   "mixins": [
-    "dynview.mixins.json"
+    "adaptiveview.mixins.json"
   ],
 
   "depends": {

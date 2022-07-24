@@ -1,4 +1,4 @@
-package net.treset.dynview.tools;
+package net.treset.adaptiveview.tools;
 
 import net.minecraft.server.MinecraftServer;
 

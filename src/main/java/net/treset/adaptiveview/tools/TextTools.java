@@ -1,4 +1,4 @@
-package net.treset.dynview.tools;
+package net.treset.adaptiveview.tools;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
@@ -6,7 +6,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
-import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 
 public class TextTools {
     public static MutableText formatText(String text) {

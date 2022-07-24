@@ -1,10 +1,9 @@
-package net.treset.dynview.distance;
+package net.treset.adaptiveview.distance;
 
 import net.minecraft.server.MinecraftServer;
-import net.treset.dynview.DynViewMod;
-import net.treset.dynview.config.Config;
-import net.treset.dynview.tools.MathTools;
-import net.treset.dynview.unlocking.LockManager;
+import net.treset.adaptiveview.config.Config;
+import net.treset.adaptiveview.tools.MathTools;
+import net.treset.adaptiveview.unlocking.LockManager;
 
 import java.util.*;
 

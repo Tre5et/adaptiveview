@@ -1,7 +1,7 @@
-package net.treset.dynview.config;
+package net.treset.adaptiveview.config;
 
 import com.google.gson.JsonObject;
-import net.treset.dynview.tools.FileTools;
+import net.treset.adaptiveview.tools.FileTools;
 
 import java.io.File;
 

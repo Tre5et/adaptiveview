@@ -1,4 +1,4 @@
-package net.treset.dynview.tools;
+package net.treset.adaptiveview.tools;
 
 public class MathTools {
     public static long longArrayAverage(Long[] values)

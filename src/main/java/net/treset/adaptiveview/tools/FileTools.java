@@ -1,7 +1,7 @@
-package net.treset.dynview.tools;
+package net.treset.adaptiveview.tools;
 
 import com.google.gson.*;
-import net.treset.dynview.DynViewMod;
+import net.treset.adaptiveview.DynViewMod;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

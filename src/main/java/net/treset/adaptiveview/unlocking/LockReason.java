@@ -1,4 +1,4 @@
-package net.treset.dynview.unlocking;
+package net.treset.adaptiveview.unlocking;
 
 public enum LockReason {
     TIMEOUT,

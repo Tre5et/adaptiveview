@@ -1,11 +1,10 @@
-package net.treset.dynview.unlocking;
+package net.treset.adaptiveview.unlocking;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
-import net.treset.dynview.tools.TextTools;
+import net.treset.adaptiveview.tools.TextTools;
 
 public class ViewDistanceLocker {
     private final LockReason lockReason;

@@ -1,9 +1,7 @@
-package net.treset.dynview.distance;
+package net.treset.adaptiveview.distance;
 
-import net.minecraft.server.MinecraftServer;
-import net.treset.dynview.DynViewMod;
-import net.treset.dynview.config.Config;
-import net.treset.dynview.tools.MinecraftServerInstance;
+import net.treset.adaptiveview.config.Config;
+import net.treset.adaptiveview.tools.MinecraftServerInstance;
 
 public class ViewDistanceHandler {
 

@@ -1,12 +1,17 @@
 package net.treset.dynview.config;
 
+import com.google.gson.JsonObject;
+import net.treset.dynview.tools.FileTools;
+
+import java.io.File;
+
 public class Config {
     private static int locked = 0;
-    private static int updateInterval = 7;
-    private static int minMspt = 4;
-    private static int maxMspt = 5;
-    private static int minMsptAggressive = 52;
-    private static int maxMsptAggressive = 52;
+    private static int updateInterval = 600;
+    private static int minMspt = 40;
+    private static int maxMspt = 50;
+    private static int minMsptAggressive = 60;
+    private static int maxMsptAggressive = 30;
     private static int minViewDistance = 4;
     private static int maxViewDistance = 20;
 
@@ -72,5 +77,32 @@ public class Config {
 
     public static void setMaxViewDistance(int maxViewDistance) {
         Config.maxViewDistance = maxViewDistance;
+    }
+
+    public static void save() {
+        JsonObject json = new JsonObject();
+        json.addProperty("updateInterval", getUpdateInterval());
+        json.addProperty("minMspt", getMinMspt());
+        json.addProperty("maxMspt", getMaxMspt());
+        json.addProperty("minMsptAggressive", getMinMsptAggressive());
+        json.addProperty("maxMsptAggressive", getMaxMsptAggressive());
+        json.addProperty("minViewDistance", getMinViewDistance());
+        json.addProperty("maxViewDistance", getMaxViewDistance());
+        FileTools.writeJsonToFile(json, new File("./config/dynview.json"));
+    }
+
+    public static void load() {
+        JsonObject json = FileTools.readJsonFile(new File("./config/dynview.json"));
+        if(json == null) {
+            save();
+            return;
+        }
+        updateInterval = json.getAsJsonPrimitive("updateInterval").getAsInt();
+        minMspt = json.getAsJsonPrimitive("minMspt").getAsInt();
+        maxMspt = json.getAsJsonPrimitive("maxMspt").getAsInt();
+        minMsptAggressive = json.getAsJsonPrimitive("minMsptAggressive").getAsInt();
+        maxMsptAggressive = json.getAsJsonPrimitive("maxMsptAggressive").getAsInt();
+        minViewDistance = json.getAsJsonPrimitive("minViewDistance").getAsInt();
+        maxViewDistance = json.getAsJsonPrimitive("maxViewDistance").getAsInt();
     }
 }

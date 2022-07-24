@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.treset.dynview.commands.CommandHandler;
+import net.treset.dynview.config.Config;
 import net.treset.dynview.distance.ServerTickHandler;
 import net.treset.dynview.tools.MinecraftServerInstance;
 import org.slf4j.Logger;
@@ -25,5 +26,7 @@ public class DynViewMod implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(MinecraftServerInstance::setInstance);
 		ServerTickEvents.END_SERVER_TICK.register(ServerTickHandler::onTick);
+
+		Config.load();
 	}
 }

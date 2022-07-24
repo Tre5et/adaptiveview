@@ -23,7 +23,6 @@ public class ViewDistanceHandler {
     public static void addViewDitance(int chunks) {
         int vd = Math.max(Config.getMinViewDistance(), Math.min(Config.getMaxViewDistance(), getViewDistance() + chunks));
         if(vd == getViewDistance()) return;
-        DynViewMod.LOGGER.info(String.format("Updated vd from %s to %s.", getViewDistance(), vd));
         setViewDistance(vd);
     }
 

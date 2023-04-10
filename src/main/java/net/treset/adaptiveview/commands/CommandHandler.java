@@ -88,7 +88,7 @@ public class CommandHandler {
     }
 
     private static int dynview(CommandContext<ServerCommandSource> ctx) {
-        TextTools.replyFormatted(ctx, String.format("?iThe current view distance is ?B%s chunks", ViewDistanceHandler.getViewDistance()), true);
+        TextTools.replyFormatted(ctx, String.format("?iThe current view distance is ?B%s chunks", ViewDistanceHandler.getViewDistance()), false);
         return 1;
     }
 }

@@ -83,7 +83,7 @@ public class TextTools {
     }
 
     public static void replyFormatted(CommandContext<ServerCommandSource> ctx, String text, boolean broadcastToOps) {
-        ctx.getSource().sendFeedback(formatText(text), broadcastToOps);
+        ctx.getSource().sendFeedback(() -> formatText(text), broadcastToOps);
     }
 
     public static void replyError(CommandContext<ServerCommandSource> ctx, String text) {

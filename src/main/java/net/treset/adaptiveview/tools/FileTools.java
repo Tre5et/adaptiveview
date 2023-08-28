@@ -1,7 +1,7 @@
 package net.treset.adaptiveview.tools;
 
 import com.google.gson.*;
-import net.treset.adaptiveview.DynViewMod;
+import net.treset.adaptiveview.AdaptiveviewMod;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -27,8 +27,7 @@ public class FileTools {
             return fileTmp.renameTo(file); //commit temporary file
         }
         catch (Exception e) {
-            e.printStackTrace();
-            DynViewMod.LOGGER.info("Failed to write JSON data to file '{}'", fileTmp.getAbsolutePath());
+            AdaptiveviewMod.LOGGER.info("Failed to write JSON data to file '{}'", fileTmp.getAbsolutePath(), e);
         }
         return false;
     }
@@ -40,8 +39,7 @@ public class FileTools {
             try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) { //open reader
                 elm = JsonParser.parseReader(reader); //read file to json element
             } catch (Exception e) {
-                e.printStackTrace();
-                DynViewMod.LOGGER.error("Failed to parse the JSON file '{}'", file.getAbsolutePath());
+                AdaptiveviewMod.LOGGER.error("Failed to parse the JSON file '{}'", file.getAbsolutePath(), e);
                 return null;
             }
 

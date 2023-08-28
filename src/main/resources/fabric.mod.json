@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.treset.adaptiveview.DynViewMod"
+      "net.treset.adaptiveview.AdaptiveviewMod"
     ]
   },
   "mixins": [

@@ -14,7 +14,7 @@ public class CommandHandler {
         if(!environment.dedicated) return;
         dispatcher.register(CommandManager.literal("adaptiveview")
                 .requires(source -> source.hasPermissionLevel(2))
-                .executes(CommandHandler::dynview)
+                .executes(CommandHandler::adaptiveview)
                 .then(CommandManager.literal("config")
                         .executes(ConfigCommands::base)
                         .then(CommandManager.literal("updateInterval")
@@ -83,11 +83,7 @@ public class CommandHandler {
         );
     }
 
-    private static int dummyExec(CommandContext<ServerCommandSource> ctx) {
-        return 1;
-    }
-
-    private static int dynview(CommandContext<ServerCommandSource> ctx) {
+    private static int adaptiveview(CommandContext<ServerCommandSource> ctx) {
         TextTools.replyFormatted(ctx, String.format("?iThe current view distance is ?B%s chunks", ViewDistanceHandler.getViewDistance()), false);
         return 1;
     }

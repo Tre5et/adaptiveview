@@ -1,9 +1,12 @@
 package net.treset.adaptiveview.config;
 
 import com.google.gson.JsonObject;
+import net.treset.adaptiveview.AdaptiveviewMod;
 import net.treset.adaptiveview.tools.FileTools;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class Config {
     private static int locked = 0;
@@ -88,11 +91,23 @@ public class Config {
         json.addProperty("maxMsptAggressive", getMaxMsptAggressive());
         json.addProperty("minViewDistance", getMinViewDistance());
         json.addProperty("maxViewDistance", getMaxViewDistance());
-        FileTools.writeJsonToFile(json, new File("./config/dynview.json"));
+        FileTools.writeJsonToFile(json, new File("./config/adaptiveview.json"));
     }
 
     public static void load() {
-        JsonObject json = FileTools.readJsonFile(new File("./config/dynview.json"));
+        boolean oldConfig = false;
+        File configFile = new File("./config/adaptiveview.json");
+        if(!configFile.exists()) {
+            configFile = new File("./config/dynview.json");
+            if(configFile.exists()) {
+                oldConfig = true;
+            } else {
+                save();
+                return;
+            }
+        }
+
+        JsonObject json = FileTools.readJsonFile(configFile);
         if(json == null) {
             save();
             return;
@@ -104,5 +119,14 @@ public class Config {
         maxMsptAggressive = json.getAsJsonPrimitive("maxMsptAggressive").getAsInt();
         minViewDistance = json.getAsJsonPrimitive("minViewDistance").getAsInt();
         maxViewDistance = json.getAsJsonPrimitive("maxViewDistance").getAsInt();
+
+        if(oldConfig) {
+            try {
+                Files.delete(configFile.toPath());
+            } catch (IOException e) {
+                AdaptiveviewMod.LOGGER.error("Failed to delete old config file", e);
+            }
+            save();
+        }
     }
 }

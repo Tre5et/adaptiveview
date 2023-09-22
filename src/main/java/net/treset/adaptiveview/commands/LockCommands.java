@@ -6,7 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.treset.adaptiveview.config.Config;
+import net.treset.adaptiveview.AdaptiveViewMod;
 import net.treset.adaptiveview.tools.TextTools;
 import net.treset.adaptiveview.unlocking.LockManager;
 import net.treset.adaptiveview.unlocking.LockReason;
@@ -18,7 +18,7 @@ public class LockCommands {
         int numLockers = LockManager.getNumUnlockers();
         int lockedManually = LockManager.isLockedManually();
 
-        if(Config.getLocked() == 0) {
+        if(AdaptiveViewMod.getConfig().getLocked() == 0) {
             TextTools.replyFormatted(ctx, "?iThe view distance is ?Bunlocked", false);
             return 1;
         }
@@ -37,7 +37,7 @@ public class LockCommands {
             return 1;
         }
 
-        TextTools.replyFormatted(ctx, String.format("?iThe view distance is currently locked to ?B%s chunks", Config.getLocked()), false);
+        TextTools.replyFormatted(ctx, String.format("?iThe view distance is currently locked to ?B%s chunks", AdaptiveViewMod.getConfig().getLocked()), false);
         return 1;
     }
 

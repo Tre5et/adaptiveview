@@ -1,132 +1,139 @@
 package net.treset.adaptiveview.config;
 
-import com.google.gson.JsonObject;
-import net.treset.adaptiveview.AdaptiveviewMod;
-import net.treset.adaptiveview.tools.FileTools;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.treset.adaptiveview.AdaptiveViewMod;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
 public class Config {
-    private static int locked = 0;
-    private static int updateInterval = 600;
-    private static int minMspt = 40;
-    private static int maxMspt = 50;
-    private static int minMsptAggressive = 60;
-    private static int maxMsptAggressive = 30;
-    private static int minViewDistance = 4;
-    private static int maxViewDistance = 20;
+    private static final File configFile = new File("./config/adaptiveview.json");
+    private static final File oldConfigFile = new File("./config/dynview.json");
+    private int locked = 0;
+    private int updateInterval = 600;
+    private int minMspt = 40;
+    private int maxMspt = 50;
+    private int minMsptAggressive = 60;
+    private int maxMsptAggressive = 30;
+    private int minViewDistance = 4;
+    private int maxViewDistance = 20;
+    private boolean overrideClient = false;
 
-    public static int getLocked() {
+    public static Config load() {
+        File file = configFile;
+        if(!file.exists()) {
+            file = oldConfigFile;
+            if (!file.exists()) {
+                Config config = new Config();
+                config.save();
+                return config;
+            }
+        }
+        String json;
+        try {
+            json = Files.readString(file.toPath());
+        } catch (IOException e) {
+            AdaptiveViewMod.LOGGER.error("Failed to read config file", e);
+            return null;
+        }
+        if(file == oldConfigFile) {
+            try {
+                Files.delete(oldConfigFile.toPath());
+            } catch (IOException e) {
+                AdaptiveViewMod.LOGGER.error("Failed to delete old config file", e);
+            }
+        }
+        return new Gson().fromJson(json, Config.class);
+    }
+
+    public void save() {
+        if(!configFile.exists()) {
+            try {
+                Files.createDirectories(configFile.getParentFile().toPath());
+                Files.createFile(configFile.toPath());
+            } catch (IOException e) {
+                AdaptiveViewMod.LOGGER.error("Failed to create config file", e);
+            }
+        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(this);
+        try {
+            Files.writeString(configFile.toPath(), json);
+        } catch (IOException e) {
+            AdaptiveViewMod.LOGGER.error("Failed to write config file", e);
+        }
+    }
+
+    public int getLocked() {
         return locked;
     }
 
-    public static int getUpdateInterval() {
+    public int getUpdateInterval() {
         return updateInterval;
     }
 
-    public static int getMinMspt() {
+    public int getMinMspt() {
         return minMspt;
     }
 
-    public static int getMaxMspt() {
+    public int getMaxMspt() {
         return maxMspt;
     }
 
-    public static int getMinMsptAggressive() {
+    public int getMinMsptAggressive() {
         return minMsptAggressive;
     }
 
-    public static int getMaxMsptAggressive() {
+    public int getMaxMsptAggressive() {
         return maxMsptAggressive;
     }
 
-    public static int getMinViewDistance() {
+    public int getMinViewDistance() {
         return minViewDistance;
     }
 
-    public static int getMaxViewDistance() {
+    public int getMaxViewDistance() {
         return maxViewDistance;
     }
 
-    public static void setLocked(int locked) {
-        Config.locked = locked;
+    public void setLocked(int locked) {
+        this.locked = locked;
     }
 
-    public static void setUpdateInterval(int updateInterval) {
-        Config.updateInterval = updateInterval;
+    public void setUpdateInterval(int updateInterval) {
+        this.updateInterval = updateInterval;
     }
 
-    public static void setMinMspt(int minMspt) {
-        Config.minMspt = minMspt;
+    public void setMinMspt(int minMspt) {
+        this.minMspt = minMspt;
     }
 
-    public static void setMaxMspt(int maxMspt) {
-        Config.maxMspt = maxMspt;
+    public void setMaxMspt(int maxMspt) {
+        this.maxMspt = maxMspt;
     }
 
-    public static void setMinMsptAggressive(int minMsptAggressive) {
-        Config.minMsptAggressive = minMsptAggressive;
+    public void setMinMsptAggressive(int minMsptAggressive) {
+        this.minMsptAggressive = minMsptAggressive;
     }
 
-    public static void setMaxMsptAggressive(int maxMsptAggressive) {
-        Config.maxMsptAggressive = maxMsptAggressive;
+    public void setMaxMsptAggressive(int maxMsptAggressive) {
+        this.maxMsptAggressive = maxMsptAggressive;
     }
 
-    public static void setMinViewDistance(int minViewDistance) {
-        Config.minViewDistance = minViewDistance;
+    public void setMinViewDistance(int minViewDistance) {
+        this.minViewDistance = minViewDistance;
     }
 
-    public static void setMaxViewDistance(int maxViewDistance) {
-        Config.maxViewDistance = maxViewDistance;
+    public void setMaxViewDistance(int maxViewDistance) {this.maxViewDistance = maxViewDistance;
     }
 
-    public static void save() {
-        JsonObject json = new JsonObject();
-        json.addProperty("updateInterval", getUpdateInterval());
-        json.addProperty("minMspt", getMinMspt());
-        json.addProperty("maxMspt", getMaxMspt());
-        json.addProperty("minMsptAggressive", getMinMsptAggressive());
-        json.addProperty("maxMsptAggressive", getMaxMsptAggressive());
-        json.addProperty("minViewDistance", getMinViewDistance());
-        json.addProperty("maxViewDistance", getMaxViewDistance());
-        FileTools.writeJsonToFile(json, new File("./config/adaptiveview.json"));
+    public boolean isOverrideClient() {
+        return overrideClient;
     }
 
-    public static void load() {
-        boolean oldConfig = false;
-        File configFile = new File("./config/adaptiveview.json");
-        if(!configFile.exists()) {
-            configFile = new File("./config/dynview.json");
-            if(configFile.exists()) {
-                oldConfig = true;
-            } else {
-                save();
-                return;
-            }
-        }
-
-        JsonObject json = FileTools.readJsonFile(configFile);
-        if(json == null) {
-            save();
-            return;
-        }
-        updateInterval = json.getAsJsonPrimitive("updateInterval").getAsInt();
-        minMspt = json.getAsJsonPrimitive("minMspt").getAsInt();
-        maxMspt = json.getAsJsonPrimitive("maxMspt").getAsInt();
-        minMsptAggressive = json.getAsJsonPrimitive("minMsptAggressive").getAsInt();
-        maxMsptAggressive = json.getAsJsonPrimitive("maxMsptAggressive").getAsInt();
-        minViewDistance = json.getAsJsonPrimitive("minViewDistance").getAsInt();
-        maxViewDistance = json.getAsJsonPrimitive("maxViewDistance").getAsInt();
-
-        if(oldConfig) {
-            try {
-                Files.delete(configFile.toPath());
-            } catch (IOException e) {
-                AdaptiveviewMod.LOGGER.error("Failed to delete old config file", e);
-            }
-            save();
-        }
+    public void setOverrideClient(boolean overrideClient) {
+        this.overrideClient = overrideClient;
     }
 }

@@ -6,12 +6,13 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.treset.adaptiveview.AdaptiveViewMod;
 import net.treset.adaptiveview.distance.ViewDistanceHandler;
 import net.treset.adaptiveview.tools.TextTools;
 
 public class CommandHandler {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandManager.RegistrationEnvironment environment) {
-        if(!environment.dedicated) return;
+        if(!environment.dedicated && !AdaptiveViewMod.getConfig().isOverrideClient()) return;
         dispatcher.register(CommandManager.literal("adaptiveview")
                 .requires(source -> source.hasPermissionLevel(2))
                 .executes(CommandHandler::adaptiveview)

@@ -2,6 +2,7 @@ package net.treset.adaptiveview.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import net.treset.adaptiveview.AdaptiveViewMod;
 
 import java.io.File;
@@ -36,7 +37,7 @@ public class Config {
             json = Files.readString(file.toPath());
         } catch (IOException e) {
             AdaptiveViewMod.LOGGER.error("Failed to read config file", e);
-            return null;
+            return new Config();
         }
         if(file == oldConfigFile) {
             try {
@@ -45,7 +46,13 @@ public class Config {
                 AdaptiveViewMod.LOGGER.error("Failed to delete old config file", e);
             }
         }
-        return new Gson().fromJson(json, Config.class);
+        Config config = null;
+        try {
+            config = new Gson().fromJson(json, Config.class);
+        } catch (JsonSyntaxException e) {
+            AdaptiveViewMod.LOGGER.error("Failed to parse config file", e);
+        }
+        return config == null ? new Config() : config;
     }
 
     public void save() {

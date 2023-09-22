@@ -1,48 +1,55 @@
 package net.treset.adaptiveview.unlocking;
 
-import net.treset.adaptiveview.AdaptiveViewMod;
+import net.treset.adaptiveview.config.Config;
 import net.treset.adaptiveview.distance.ViewDistanceHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LockManager {
-    private static List<ViewDistanceLocker> unlockers = new ArrayList<>();
-    private static int lockedManually = 0;
+    private final Config config;
+    private final ViewDistanceHandler viewDistanceHandler;
+    private final List<ViewDistanceLocker> unlockers = new ArrayList<>();
+    private int lockedManually = 0;
 
-    private static ViewDistanceLocker currentLocker = null;
+    private ViewDistanceLocker currentLocker = null;
 
-    public static ViewDistanceLocker getCurrentLocker() {
+    public LockManager(Config config, ViewDistanceHandler viewDistanceHandler) {
+        this.config = config;
+        this.viewDistanceHandler = viewDistanceHandler;
+    }
+
+    public ViewDistanceLocker getCurrentLocker() {
         return currentLocker;
     }
 
-    public static int isLockedManually() { return lockedManually; }
-    public static void lockManually(int chunks) {
+    public int isLockedManually() { return lockedManually; }
+    public void lockManually(int chunks) {
         lockedManually = chunks;
         lock(chunks);
     }
 
-    public static int getNumUnlockers() { return unlockers.size(); }
+    public int getNumUnlockers() { return unlockers.size(); }
 
-    public static void addUnlocker(ViewDistanceLocker unlocker) {
+    public void addUnlocker(ViewDistanceLocker unlocker) {
         unlockers.add(unlocker);
         updateUnlocker();
     }
 
-    public static void clearUnlockers() {
+    public void clearUnlockers() {
         unlockers.clear();
     }
 
 
-    private static final List<ViewDistanceLocker> toRemove = new ArrayList<>();
-    public static void finishUnlocker(ViewDistanceLocker unlocker) {
+    private final List<ViewDistanceLocker> toRemove = new ArrayList<>();
+    public void finishUnlocker(ViewDistanceLocker unlocker) {
         toRemove.add(unlocker);
     }
 
-    public static void updateUnlocker() {
+    public void updateUnlocker() {
         if(isLockedManually() != 0) return;
 
-        if(unlockers.size() == 0) {
+        if(unlockers.isEmpty()) {
             clear();
             return;
         }
@@ -60,12 +67,12 @@ public class LockManager {
         lock(smallestViewDistance);
     }
 
-    public static void lock(int chunks) {
-        AdaptiveViewMod.getConfig().setLocked(chunks);
-        ViewDistanceHandler.setViewDistance(chunks);
+    public void lock(int chunks) {
+        config.setLocked(chunks);
+        viewDistanceHandler.setViewDistance(chunks);
     }
 
-    public static void clear() {
+    public void clear() {
         clearUnlockers();
 
         if(lockedManually > 0) {
@@ -74,19 +81,19 @@ public class LockManager {
         } else unlock();
     }
 
-    public static void unlockManually() {
+    public void unlockManually() {
         lockedManually = 0;
         updateUnlocker();
     }
 
-    public static void unlock() {
+    public void unlock() {
         currentLocker = null;
 
-        AdaptiveViewMod.getConfig().setLocked(0);
-        ViewDistanceHandler.addViewDitance(0);
+        config.setLocked(0);
+        viewDistanceHandler.addViewDistance(0);
     }
 
-    public static void onTick() {
+    public void onTick() {
         for(ViewDistanceLocker e : unlockers) {
             e.onTick();
         }

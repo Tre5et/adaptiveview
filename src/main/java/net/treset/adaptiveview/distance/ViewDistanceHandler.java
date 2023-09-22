@@ -1,35 +1,40 @@
 package net.treset.adaptiveview.distance;
 
 import net.treset.adaptiveview.AdaptiveViewMod;
-import net.treset.adaptiveview.tools.MinecraftServerInstance;
+import net.treset.adaptiveview.config.Config;
 
 public class ViewDistanceHandler {
+    private final Config config;
 
-    public static void updateViewDistance(long averageTicks) {
-        if(AdaptiveViewMod.getConfig().getLocked() != 0) return;
-        if(averageTicks / 1000000 > AdaptiveViewMod.getConfig().getMaxMspt()) {
-            if(averageTicks / 1000000 > AdaptiveViewMod.getConfig().getMaxMsptAggressive()) {
-                addViewDitance(-2);
-            } else addViewDitance(-1);
-        } else if(averageTicks / 1000000 < AdaptiveViewMod.getConfig().getMinMspt()) {
-            if(averageTicks / 1000000 < AdaptiveViewMod.getConfig().getMinMsptAggressive()) {
-                addViewDitance(2);
-            } else addViewDitance(1);
+    public ViewDistanceHandler(Config config) {
+        this.config = config;
+    }
+
+    public void updateViewDistance(long averageTicks) {
+        if(config.getLocked() != 0) return;
+        if(averageTicks / 1000000 > config.getMaxMspt()) {
+            if(averageTicks / 1000000 > config.getMaxMsptAggressive()) {
+                addViewDistance(-2);
+            } else addViewDistance(-1);
+        } else if(averageTicks / 1000000 < config.getMinMspt()) {
+            if(averageTicks / 1000000 < config.getMinMsptAggressive()) {
+                addViewDistance(2);
+            } else addViewDistance(1);
         }
     }
 
-    public static void addViewDitance(int chunks) {
-        int vd = Math.max(AdaptiveViewMod.getConfig().getMinViewDistance(), Math.min(AdaptiveViewMod.getConfig().getMaxViewDistance(), getViewDistance() + chunks));
+    public void addViewDistance(int chunks) {
+        int vd = Math.max(config.getMinViewDistance(), Math.min(config.getMaxViewDistance(), getViewDistance() + chunks));
         if(vd == getViewDistance()) return;
         setViewDistance(vd);
     }
 
-    public static void setViewDistance(int chunks) {
-        MinecraftServerInstance.getInstance().getPlayerManager().setViewDistance(chunks);
+    public void setViewDistance(int chunks) {
+        AdaptiveViewMod.getServer().getPlayerManager().setViewDistance(chunks);
     }
 
-    public static int getViewDistance() {
-        return MinecraftServerInstance.getInstance().getPlayerManager().getViewDistance();
+    public int getViewDistance() {
+        return AdaptiveViewMod.getServer().getPlayerManager().getViewDistance();
     }
 
 }

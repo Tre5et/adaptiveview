@@ -11,14 +11,16 @@ public class ViewDistanceLocker {
     private final int distance;
     private final int timeout;
     private int remainingTime;
+    private final LockManager lockManager;
     private final ServerPlayerEntity player;
     private Vec3d startPos;
     private final CommandContext<ServerCommandSource> ctx;
 
-    public ViewDistanceLocker(LockReason lockReason, int distance, int timeout, ServerPlayerEntity player, CommandContext<ServerCommandSource> ctx) {
+    public ViewDistanceLocker(LockReason lockReason, int distance, int timeout, LockManager lockManager, ServerPlayerEntity player, CommandContext<ServerCommandSource> ctx) {
         this.lockReason = lockReason;
         this.distance = distance;
         this.timeout = this.remainingTime = timeout;
+        this.lockManager = lockManager;
         this.player = player;
         this.ctx = ctx;
 
@@ -35,17 +37,17 @@ public class ViewDistanceLocker {
         if(this.getUnlockReason() == LockReason.TIMEOUT) {
             this.remainingTime--;
             if(this.remainingTime <= 0) {
-                LockManager.finishUnlocker(this);
+                lockManager.finishUnlocker(this);
                 TextTools.replyFormatted(ctx, String.format("?aCleared view distance lock of ?B%s chunks?B after ?B%s ticks", this.getDistance(), this.getTimeout()), true);
             }
         } else if(this.getUnlockReason() == LockReason.PLAYER_DISCONNECT) {
              if(this.player.isDisconnected()) {
-                 LockManager.finishUnlocker(this);
+                 lockManager.finishUnlocker(this);
                  TextTools.replyFormatted(ctx, String.format("?aCleared view distance lock of ?B%s chunks?B after ?Bplayer %s disconnected", this.getDistance(), this.player.getName().getString()), true);
              }
         } else if(this.getUnlockReason() == LockReason.PLAYER_MOVE) {
             if(this.player.isDisconnected() || this.player.getPos() != this.startPos) {
-                LockManager.finishUnlocker(this);
+                lockManager.finishUnlocker(this);
                 TextTools.replyFormatted(ctx, String.format("?aCleared view distance lock of ?B%s chunks?B after ?Bplayer %s moved", this.getDistance(), this.player.getName().getString()), true);
             }
         }

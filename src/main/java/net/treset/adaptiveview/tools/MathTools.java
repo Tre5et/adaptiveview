@@ -13,17 +13,4 @@ public class MathTools {
         }
         return sum / values.length;
     }
-
-    public static double doubleArrayAverage(Double[] values)
-    {
-        if (values == null || values.length == 0) {
-            return 0;
-        }
-
-        double sum = 0;
-        for (double e : values) {
-            sum += e;
-        }
-        return sum / values.length;
-    }
 }

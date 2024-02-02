@@ -38,12 +38,12 @@ public class ServerTickHandler {
             int startValue = endValue - 1 - (tickCounter - 1) % 100;
             int carry = Math.max(0, -startValue) - 1;
             startValue = Math.max(0, startValue);
-            long[] arr = Arrays.copyOfRange(server.lastTickLengths, startValue, endValue);
+            long[] arr = Arrays.copyOfRange(server.getTickTimes(), startValue, endValue);
             for(long e : arr) {
                 tickLengths.add(e);
             }
             if(carry != -1) {
-                for(long e : Arrays.copyOfRange(server.lastTickLengths, 99 - carry, 100)) {
+                for(long e : Arrays.copyOfRange(server.getTickTimes(), 99 - carry, 100)) {
                     tickLengths.add(e);
                 }
             }

@@ -44,7 +44,6 @@ public class ServerHandler {
             ServerState state = new ServerState(
                     ViewDistanceHandler.getViewDistance(),
                     ViewDistanceHandler.getSimDistance(),
-                    ViewDistanceHandler.getChunkTickingDistance(),
                     (double)MathTools.longArrayAverage(tickLengths.toArray(new Long[0])) / 1000000d,
                     getMemory(),
                     getPlayers()
@@ -64,8 +63,6 @@ public class ServerHandler {
 
     public static List<String> getPlayers() {
         MinecraftServer server = AdaptiveViewMod.getServer();
-        return server.getPlayerManager().getPlayerList().stream()
-                .map((p) -> p.getName().getString())
-                .toList();
+        return Arrays.stream(server.getPlayerNames()).toList();
     }
 }

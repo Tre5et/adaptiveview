@@ -1,6 +1,6 @@
 package net.treset.adaptiveview.tools;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public enum NotificationState {
     ADDED,
     REMOVED;
 
-    public static NotificationState getFromPlayer(ServerPlayerEntity player, List<String> broadcastTo) {
+    public static NotificationState getFromPlayer(ServerPlayer player, List<String> broadcastTo) {
         for(String s : broadcastTo) {
             if(player.getName().getString().equalsIgnoreCase(s)) {
                 return ADDED;

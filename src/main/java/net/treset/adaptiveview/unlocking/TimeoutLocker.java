@@ -1,6 +1,5 @@
 package net.treset.adaptiveview.unlocking;
 
-import net.treset.adaptiveview.config.RuleTarget;
 import net.treset.adaptiveview.tools.Message;
 
 public class TimeoutLocker extends Locker {

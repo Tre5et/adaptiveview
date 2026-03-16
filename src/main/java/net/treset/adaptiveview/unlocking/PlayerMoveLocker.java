@@ -1,22 +1,22 @@
 package net.treset.adaptiveview.unlocking;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import net.treset.adaptiveview.tools.Message;
 
 public class PlayerMoveLocker extends Locker {
-    private final ServerPlayerEntity player;
-    private final Vec3d startPos;
+    private final ServerPlayer player;
+    private final Vec3 startPos;
 
-    public PlayerMoveLocker(ServerPlayerEntity player, int distance, LockTarget target, LockManager lockManager) {
+    public PlayerMoveLocker(ServerPlayer player, int distance, LockTarget target, LockManager lockManager) {
         super(distance, target, lockManager);
         this.player = player;
-        this.startPos = player.getEntityPos();
+        this.startPos = player.position();
     }
 
     @Override
     public boolean shouldUnlock() {
-        return this.player.isDisconnected() || !this.player.getEntityPos().equals(this.startPos);
+        return this.player.hasDisconnected() || !this.player.position().equals(this.startPos);
     }
 
     @Override

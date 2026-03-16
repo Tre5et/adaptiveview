@@ -7,9 +7,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
 import net.treset.adaptiveview.commands.ConfigCommandHandler;
 import net.treset.adaptiveview.commands.LockCommandHandler;
 import net.treset.adaptiveview.commands.NotificationCommandHandler;
@@ -59,11 +59,11 @@ public class AdaptiveViewMod implements ModInitializer {
 		ServerTickEvents.END_SERVER_TICK.register(serverHandler::onTick);
 	}
 
-	private void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandManager.RegistrationEnvironment environment) {
-		if(!environment.dedicated && !config.isAllowOnClient()) return;
-		LiteralArgumentBuilder<ServerCommandSource> builder = CommandManager.literal("adaptiveview")
+	private void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+		if(!selection.includeDedicated && !config.isAllowOnClient()) return;
+		LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("adaptiveview")
 				.executes(this::status)
-				.then(CommandManager.literal("status")
+				.then(Commands.literal("status")
 						.executes(this::status)
 				);
 		notificationCommandHandler.registerCommands(builder);
@@ -73,10 +73,9 @@ public class AdaptiveViewMod implements ModInitializer {
 		dispatcher.register(builder);
 	}
 
-	private int status(CommandContext<ServerCommandSource> ctx) {
+	private int status(CommandContext<CommandSourceStack> ctx) {
 		TextTools.replyFormatted(ctx, "View Distance: $b%s chunks", ViewDistanceHandler.getViewDistance());
 		TextTools.replyFormatted(ctx, "Simulation Distance: $b%s chunks", ViewDistanceHandler.getSimDistance());
-        TextTools.replyFormatted(ctx, "Chunk-Ticking Distance: $b%s chunks", ViewDistanceHandler.getChunkTickingDistance());
 		return 1;
 	}
 }

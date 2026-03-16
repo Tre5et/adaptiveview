@@ -1,19 +1,19 @@
 package net.treset.adaptiveview.unlocking;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.treset.adaptiveview.tools.Message;
 
 public class PlayerDisconnectLocker extends Locker {
-    private final ServerPlayerEntity player;
+    private final ServerPlayer player;
 
-    public PlayerDisconnectLocker(ServerPlayerEntity player, int distance, LockTarget target, LockManager lockManager) {
+    public PlayerDisconnectLocker(ServerPlayer player, int distance, LockTarget target, LockManager lockManager) {
         super(distance, target, lockManager);
         this.player = player;
     }
 
     @Override
     public boolean shouldUnlock() {
-        return this.player.isDisconnected();
+        return this.player.hasDisconnected();
     }
 
     @Override

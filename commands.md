@@ -13,7 +13,6 @@ All commands are accessible using `/adaptiveview`.
 - `main [chunks] {[condition]}` locks the View Distance and Simulation Distance to `chunks`.
 - `view [chunks] {[condition]}` locks the View Distance to `chunks`.
 - `simulation [chunks] {[condition]}` locks the Simulation Distance to `chunks`.
-- `chunk-tick [chunks] {[condition]}` locks the Chunk-Ticking Distance to `chunks`.
 
 #### Conditions
 `conditon` is a optional condition that allows you to specify when the View Distance lock is cleared. There are the following conditions:
@@ -27,10 +26,8 @@ All commands are accessible using `/adaptiveview`.
 `/adaptiveview unlock` allows you to unlock the View and Simulation Distance.
 
 - `all` clears all locks, that don't have a condition for automatic unlocking
-- `main` clears all View Distance and Simulation Distance locks, that don't have a condition for automatic unlocking
 - `view` clears all View Distance locks, that don't have a condition for automatic unlocking
 - `simulation` clears all Simulation Distance locks, that don't have a condition for automatic unlocking
-- `chunk-tick` clears all Chunk-Ticking Distance locks, that don't have a condition for automatic unlocking
 
 - `[unlock] clear` also clears the locks, that have a condition for automatic unlocking
 
@@ -89,24 +86,12 @@ adaptiveview
 |   |   |   |   |   [player: player] +
 |   |   |   |   |   |   disconnect
 |   |   |   |   |   |   move
-|   |   chunk-tick +
-|   |   |   [chunks: int]
-|   |   |   |   timeout +
-|   |   |   |   |   [ticks: int]
-|   |   |   |   player +
-|   |   |   |   |   [player: player] +
-|   |   |   |   |   |   disconnect
-|   |   |   |   |   |   move
 |   unlock
 |   |   all
-|   |   |   clear
-|   |   main
 |   |   |   clear
 |   |   view
 |   |   |   clear
 |   |   simulation
-|   |   |   clear
-|   |   chunk-tick
 |   |   |   clear
 |   config
 |   |   status
@@ -128,10 +113,6 @@ adaptiveview
 |   |   max-simulation-distance
 |   |   |   [chunks: int]
 |   |   min-simulation-distance
-|   |   |   [chunks: int]
-|   |   max-chunk-tick-distance
-|   |   |   [chunks: int]
-|   |   min-chunk-tick-distance
 |   |   |   [chunks: int]
 |   |   rules
 |   |   |   [index: int]
@@ -157,7 +138,6 @@ adaptiveview
 |   |   |   |   |   target
 |   |   |   |   |   |   view
 |   |   |   |   |   |   simulation
-|   |   |   |   |   |   chunk-tick
 |   |   |   |   |   update-rate
 |   |   |   |   |   |   [ticks: int]
 |   |   |   |   |   |   clear
@@ -179,55 +159,45 @@ adaptiveview
 |   |   |   |   |   |   [min: int] +
 |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   chunk-tick
 |   |   |   |   |   max + 
 |   |   |   |   |   |   [max: int] +
 |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   chunk-tick
 |   |   |   |   |   range +
 |   |   |   |   |   |   [min: int] +
 |   |   |   |   |   |   |   [max: int] +
 |   |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   |   chunk-tick
 |   |   |   |   memory +
 |   |   |   |   |   min +
 |   |   |   |   |   |   [min: int] +
 |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   chunk-tick
 |   |   |   |   |   max + 
 |   |   |   |   |   |   [max: int] +
 |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   chunk-tick
 |   |   |   |   |   range +
 |   |   |   |   |   |   [min: int] +
 |   |   |   |   |   |   |   [max: int] +
 |   |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   |   chunk-tick
 |   |   |   |   players +
 |   |   |   |   |   min +
 |   |   |   |   |   |   [min: int] +
 |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   chunk-tick
 |   |   |   |   |   max + 
 |   |   |   |   |   |   [max: int] +
 |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   chunk-tick
 |   |   |   |   |   range +
 |   |   |   |   |   |   [min: int] +
 |   |   |   |   |   |   |   [max: int] +
 |   |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   |   chunk-tick
 |   |   |   |   |   names +
 |   |   |   |   |   |   [names: string] +
 |   |   |   |   |   |   |   view
 |   |   |   |   |   |   |   simulation
-|   |   |   |   |   |   |   chunk-tick
 ```

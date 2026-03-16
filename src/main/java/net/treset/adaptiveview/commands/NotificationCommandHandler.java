@@ -2,9 +2,9 @@ package net.treset.adaptiveview.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.server.level.ServerPlayer;
 import net.treset.adaptiveview.config.Config;
 import net.treset.adaptiveview.distance.ViewDistanceHandler;
 import net.treset.adaptiveview.tools.NotificationState;
@@ -18,8 +18,8 @@ public class NotificationCommandHandler {
         this.config = config;
     }
 
-    public int notifications(CommandContext<ServerCommandSource> ctx) {
-        ServerPlayerEntity player = ctx.getSource().getPlayer();
+    public int notifications(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
         if(player == null) {
             TextTools.replyError(ctx, "Error getting player from command context!");
             return 0;
@@ -58,8 +58,8 @@ public class NotificationCommandHandler {
         return 1;
     }
 
-    public int notificationsChanges(CommandContext<ServerCommandSource> ctx) {
-        ServerPlayerEntity player = ctx.getSource().getPlayer();
+    public int notificationsChanges(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
         if(player == null) {
             TextTools.replyError(ctx, "Error getting player from command context!");
             return 0;
@@ -82,8 +82,8 @@ public class NotificationCommandHandler {
         return 1;
     }
 
-    public int notificationsChangesSubscribe(CommandContext<ServerCommandSource> ctx) {
-        ServerPlayerEntity player = ctx.getSource().getPlayer();
+    public int notificationsChangesSubscribe(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
         if(player == null) {
             TextTools.replyError(ctx, "Error getting player from command context!");
             return 0;
@@ -107,8 +107,8 @@ public class NotificationCommandHandler {
         return 1;
     }
 
-    public int notificationsChangesUnsubscribe(CommandContext<ServerCommandSource> ctx) {
-        ServerPlayerEntity player = ctx.getSource().getPlayer();
+    public int notificationsChangesUnsubscribe(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
         if(player == null) {
             TextTools.replyError(ctx, "Error getting player from command context!");
             return 0;
@@ -132,8 +132,8 @@ public class NotificationCommandHandler {
         return 1;
     }
 
-    public int notificationsLock(CommandContext<ServerCommandSource> ctx) {
-        ServerPlayerEntity player = ctx.getSource().getPlayer();
+    public int notificationsLock(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
         if(player == null) {
             TextTools.replyError(ctx, "Error getting player from command context!");
             return 0;
@@ -156,8 +156,8 @@ public class NotificationCommandHandler {
         return 1;
     }
 
-    public int notificationsLockSubscribe(CommandContext<ServerCommandSource> ctx) {
-        ServerPlayerEntity player = ctx.getSource().getPlayer();
+    public int notificationsLockSubscribe(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
         if(player == null) {
             TextTools.replyError(ctx, "Error getting player from command context!");
             return 0;
@@ -181,8 +181,8 @@ public class NotificationCommandHandler {
         return 1;
     }
 
-    public int notificationsLockUnsubscribe(CommandContext<ServerCommandSource> ctx) {
-        ServerPlayerEntity player = ctx.getSource().getPlayer();
+    public int notificationsLockUnsubscribe(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
         if(player == null) {
             TextTools.replyError(ctx, "Error getting player from command context!");
             return 0;
@@ -206,24 +206,24 @@ public class NotificationCommandHandler {
         return 1;
     }
 
-    public void registerCommands(LiteralArgumentBuilder<ServerCommandSource> builder) {
-        builder.then(CommandManager.literal("notifications")
+    public void registerCommands(LiteralArgumentBuilder<CommandSourceStack> builder) {
+        builder.then(Commands.literal("notifications")
                 .executes(this::notifications)
-                .then(CommandManager.literal("changes")
+                .then(Commands.literal("changes")
                         .executes(this::notificationsChanges)
-                        .then(CommandManager.literal("subscribe")
+                        .then(Commands.literal("subscribe")
                                 .executes(this::notificationsChangesSubscribe)
                         )
-                        .then(CommandManager.literal("unsubscribe")
+                        .then(Commands.literal("unsubscribe")
                                 .executes(this::notificationsChangesUnsubscribe)
                         )
                 )
-                .then(CommandManager.literal("lock")
+                .then(Commands.literal("lock")
                         .executes(this::notificationsLock)
-                        .then(CommandManager.literal("subscribe")
+                        .then(Commands.literal("subscribe")
                                 .executes(this::notificationsLockSubscribe)
                         )
-                        .then(CommandManager.literal("unsubscribe")
+                        .then(Commands.literal("unsubscribe")
                                 .executes(this::notificationsLockUnsubscribe)
                         )
                 )

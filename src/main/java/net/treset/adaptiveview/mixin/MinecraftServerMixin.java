@@ -14,8 +14,8 @@ import java.util.function.BooleanSupplier;
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
 
-    @Inject(method="tick(Ljava/util/function/BooleanSupplier;)V", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci, @Local(ordinal = 1) long delta) {
-        ServerHandler.getTickLengths().add(delta);
+    @Inject(method="tickServer(Ljava/util/function/BooleanSupplier;)V", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci, @Local(ordinal = 1) long tickTime) {
+        ServerHandler.getTickLengths().add(tickTime);
     }
 }

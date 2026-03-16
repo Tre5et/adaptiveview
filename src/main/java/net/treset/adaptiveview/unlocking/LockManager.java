@@ -1,6 +1,6 @@
 package net.treset.adaptiveview.unlocking;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.treset.adaptiveview.AdaptiveViewMod;
 import net.treset.adaptiveview.config.Config;
 import net.treset.adaptiveview.distance.ViewDistanceHandler;
@@ -17,11 +17,9 @@ public class LockManager {
     private final List<Locker> lockers = new ArrayList<>();
     private Integer viewLockedManually = null;
     private Integer simLockedManually = null;
-    private Integer chunkTickLockedManually = null;
 
     private Locker currentViewLocker = null;
     private Locker currentSimLocker = null;
-    private Locker currentChunkTickLocker = null;
 
     public LockManager(Config config, ViewDistanceHandler viewDistanceHandler) {
         this.config = config;
@@ -29,17 +27,13 @@ public class LockManager {
     }
 
     public void lockManually(Integer chunks, LockTarget target) {
-        if(target == LockTarget.VIEW || target == LockTarget.MAIN) {
+        if(target == LockTarget.VIEW || target == LockTarget.ALL) {
             viewLockedManually = chunks;
             lockView(chunks);
         }
-        if(target == LockTarget.SIM || target == LockTarget.MAIN) {
+        if(target == LockTarget.SIM || target == LockTarget.ALL) {
             simLockedManually = chunks;
             lockSim(chunks);
-        }
-        if(target == LockTarget.CHUNK) {
-            chunkTickLockedManually = chunks;
-            lockChunkTick(chunks);
         }
 
         updateLocker();
@@ -49,7 +43,7 @@ public class LockManager {
         return switch (target) {
             case VIEW -> viewLockedManually;
             case SIM -> simLockedManually;
-            case MAIN -> {
+            case ALL -> {
                 if(viewLockedManually != null && simLockedManually != null) {
                     yield Math.min(viewLockedManually, simLockedManually);
                 } else if(viewLockedManually != null) {
@@ -57,7 +51,6 @@ public class LockManager {
                 }
                 yield simLockedManually;
             }
-            case CHUNK -> chunkTickLockedManually;
         };
     }
 
@@ -65,7 +58,7 @@ public class LockManager {
         return switch (target) {
             case VIEW -> currentViewLocker;
             case SIM -> currentSimLocker;
-            case MAIN -> {
+            case ALL -> {
                 if (currentViewLocker != null && currentSimLocker != null) {
                     yield currentViewLocker.getDistance() < currentSimLocker.getDistance() ? currentViewLocker : currentSimLocker;
                 } else if (currentViewLocker != null) {
@@ -76,16 +69,14 @@ public class LockManager {
                     yield null;
                 }
             }
-            case CHUNK -> currentChunkTickLocker;
         };
     }
 
     public int getNumLockers(LockTarget target) {
         return switch (target) {
-            case VIEW -> (int) lockers.stream().filter(e -> e.getTarget() == LockTarget.VIEW || e.getTarget() == LockTarget.MAIN).count();
-            case SIM -> (int) lockers.stream().filter(e -> e.getTarget() == LockTarget.SIM || e.getTarget() == LockTarget.MAIN).count();
-            case MAIN -> (int) lockers.stream().filter(e -> e.getTarget() == LockTarget.VIEW || e.getTarget() == LockTarget.SIM || e.getTarget() == LockTarget.MAIN).count();
-            case CHUNK -> (int) lockers.stream().filter(e -> e.getTarget() == LockTarget.CHUNK).count();
+            case VIEW -> (int) lockers.stream().filter(e -> e.getTarget() == LockTarget.VIEW || e.getTarget() == LockTarget.ALL).count();
+            case SIM -> (int) lockers.stream().filter(e -> e.getTarget() == LockTarget.SIM || e.getTarget() == LockTarget.ALL).count();
+            case ALL -> (int) lockers.stream().filter(e -> e.getTarget() == LockTarget.VIEW || e.getTarget() == LockTarget.SIM || e.getTarget() == LockTarget.ALL).count();
         };
     }
 
@@ -100,7 +91,7 @@ public class LockManager {
                 for(Locker e : lockers) {
                     if(e.getTarget() == LockTarget.VIEW) {
                         finishLocker(e);
-                    } else if(e.getTarget() == LockTarget.MAIN) {
+                    } else if(e.getTarget() == LockTarget.ALL) {
                         e.setTarget(LockTarget.SIM);
                     }
                 }
@@ -109,21 +100,14 @@ public class LockManager {
                 for(Locker e : lockers) {
                     if(e.getTarget() == LockTarget.SIM) {
                         finishLocker(e);
-                    } else if(e.getTarget() == LockTarget.MAIN) {
+                    } else if(e.getTarget() == LockTarget.ALL) {
                         e.setTarget(LockTarget.VIEW);
                     }
                 }
             }
-            case MAIN -> {
+            case ALL -> {
                 for(Locker e : lockers) {
-                    if(e.getTarget() == LockTarget.SIM || e.getTarget() == LockTarget.VIEW || e.getTarget() == LockTarget.MAIN) {
-                        finishLocker(e);
-                    }
-                }
-            }
-            case CHUNK -> {
-                for(Locker e : lockers) {
-                    if(e.getTarget() == LockTarget.CHUNK) {
+                    if(e.getTarget() == LockTarget.SIM || e.getTarget() == LockTarget.VIEW || e.getTarget() == LockTarget.ALL) {
                         finishLocker(e);
                     }
                 }
@@ -139,20 +123,19 @@ public class LockManager {
     }
 
     public void updateLocker() {
-        if(getLockedManually(LockTarget.MAIN) != null) return;
+        if(getLockedManually(LockTarget.ALL) != null) return;
 
         ArrayList<Locker> viewLockers = new ArrayList<>();
         ArrayList<Locker> simLockers = new ArrayList<>();
         ArrayList<Locker> chunkTickLockers = new ArrayList<>();
         for(Locker e : lockers) {
             switch (e.getTarget()) {
-                case MAIN -> {
+                case ALL -> {
                     viewLockers.add(e);
                     simLockers.add(e);
                 }
                 case VIEW -> viewLockers.add(e);
                 case SIM -> simLockers.add(e);
-                case CHUNK -> chunkTickLockers.add(e);
             }
         }
 
@@ -167,13 +150,6 @@ public class LockManager {
             processLock(simLockers, l -> {
                 currentSimLocker = l;
                 lockSim(l != null ? l.getDistance() : null);
-            });
-        }
-
-        if(getLockedManually(LockTarget.CHUNK) == null) {
-            processLock(chunkTickLockers, l -> {
-                currentChunkTickLocker = l;
-                lockChunkTick(l != null ? l.getDistance() : null);
             });
         }
     }
@@ -197,13 +173,6 @@ public class LockManager {
         }
     }
 
-    public void lockChunkTick(Integer chunks)  {
-        config.setChunkTickingLocked(chunks != null);
-        if(chunks != null) {
-            ViewDistanceHandler.setChunkTickingDistance(chunks);
-        }
-    }
-
     public void onTick() {
         for(Locker e : lockers) {
             e.onTick();
@@ -218,7 +187,7 @@ public class LockManager {
         return config;
     }
 
-    public static boolean shouldBroadcastLock(ServerPlayerEntity player, Config config) {
+    public static boolean shouldBroadcastLock(ServerPlayer player, Config config) {
         NotificationState state = NotificationState.getFromPlayer(player, config.getBroadcastLock());
         if(state == NotificationState.ADDED) {
             return true;
@@ -229,7 +198,7 @@ public class LockManager {
         return switch(config.getBroadcastLockDefault()) {
             case ALL -> true;
             case NONE -> false;
-            case OPS -> AdaptiveViewMod.getServer().getPlayerManager().isOperator(player.getPlayerConfigEntry());
+            case OPS -> AdaptiveViewMod.getServer().getPlayerList().isOp(player.nameAndId());
         };
     }
 }

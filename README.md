@@ -6,7 +6,7 @@ A server side fabric mod that dynamically adjusts the server's View- and Simulat
 
 The mod provides a highly customizable system for dynamically adjusting the View- and Simulation-Distance of servers based on multiple real time parameters.
 
-It also includes a powerfull locking and unlocking system, allowing for smooth operation of View-Distance sensitive contraptions.
+It also includes a powerful locking and unlocking system, allowing for smooth operation of View-Distance sensitive contraptions.
 
 ## Setup
 
@@ -18,7 +18,7 @@ You also need to install [Fabric API](https://modrinth.com/mod/fabric-api/versio
 
  - Dynamic adjustment of the View- and Simulation-Distance based of MSPT, Memory usage and online Players
  - Highly customizable configuration [learn more...](config.md)
- - Ingame commands to change everything [learn more...](commands.md)
+ - In-game commands to change everything [learn more...](commands.md)
  - An advanced view distance locking system including support for automated unlocking [learn more...](commands.md#lock)
 
 ## License

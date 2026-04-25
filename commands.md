@@ -10,12 +10,12 @@ All commands are accessible using `/adaptiveview`.
 
 `/adaptiveview lock` allows you to check if the View or Simulation Distance is currently locked and allows to lock it.
 
-- `main [chunks] {[condition]}` locks the View Distance and Simulation Distance to `chunks`.
+- `all [chunks] {[condition]}` locks the View Distance and Simulation Distance to `chunks`.
 - `view [chunks] {[condition]}` locks the View Distance to `chunks`.
 - `simulation [chunks] {[condition]}` locks the Simulation Distance to `chunks`.
 
 #### Conditions
-`conditon` is a optional condition that allows you to specify when the View Distance lock is cleared. There are the following conditions:
+`conditon` is an optional condition that allows you to specify when the View Distance lock is cleared. There are the following conditions:
 
   - `player [name] disconnect` the specified player leaves the game
   - `player [name] move` the specified player moves
@@ -44,7 +44,7 @@ All commands are accessible using `/adaptiveview`.
 ### Rules
 - `rules` shows you an index list of all options
 - `rules [index]` selects a specific rule to view and edit
-- `rules add [type] [condition-options]` adds a rule of the specific type with specified condition options (the action needs to be edited afterwards)
+- `rules add [type] [condition-options]` adds a rule of the specific type with specified condition options (the action needs to be edited afterward)
 
 ## All commands:
 
@@ -62,7 +62,7 @@ adaptiveview
 |   |   |   unsubscribe
 |   lock
 |   |   status
-|   |   main +
+|   |   all +
 |   |   |   [chunks: int]
 |   |   |   |   timeout +
 |   |   |   |   |   [ticks: int]

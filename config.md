@@ -1,6 +1,6 @@
 # Configuration
 
-The configuration is stored in `config/adaptiveview.json`. A default config is generated when the server is first started with the mod. Otherwise you can find the default configuration [here](default_config.json).
+The configuration is stored in `config/adaptiveview.json`. A default config is generated when the server is first started with the mod. Otherwise, you can find the default configuration [here](default_config.json).
 
 ## Basic Configuration
 
@@ -15,9 +15,9 @@ These values apply if there are no rules active that override them.
 - `min_sim_distance`: The minimum simulation distance the dynamic adjustment can go down to.
 
 ### Other Configurations
-- `allow_on_client`: If this is enabled the mod will try to work in a client only environment. This can lead to unexpected behaviour.
+- `allow_on_client`: If this is enabled the mod will try to work in a client only environment. This can lead to unexpected behavior.
 - `broadcast_changes_default`: Sets which player group (`NONE`, `OPS`, `ALL`) gets notified when the view distance changes by default.
-- `broadcast_changes`: List of (case-insensitive) player names, that get notified when the view distance changes. If the name is prefixed with `!`, the player will not get notified..
+- `broadcast_changes`: List of (case-insensitive) player names, that get notified when the view distance changes. If the name is prefixed with `!`, the player will not get notified.
 - `broadcast_lock_default`: Sets which player group (`NONE`, `OPS`, `ALL`) gets notified when the view distance is locked or unlocked by default.
 - `broadcast_lock`: List of (case-insensitive) player names, that get notified when the view distance is locked or unlocked. If the name is prefixed with `!`, the player will not get notified. 
 
@@ -121,7 +121,7 @@ A config that could be used, if a server is low on memory.
 > [!NOTE] 
 > Updating view distance based on memory too quickly can be problematic, as it can take a while for memory usage to change after decreasing view distance.
 
-1. The View Distance is updated every 1200 ticks (1 mínute),
+1. The View Distance is updated every 1200 ticks (1 minute).
 2. If there is at most one player online, the View Distance is at most 28 chunks.
 3. If there are 2 players online, the View Distance is at most 15 chunks. The update rate is also increased to 300 ticks to allow for closer monitoring of memory usage.
 4. If there are 3 or more players online, the View Distance is at most 12 chunks. The update rate of 300 ticks is still active from 3.

@@ -43,10 +43,6 @@ public class AdaptiveViewMod implements ModInitializer {
 		return server;
 	}
 
-	public static ServerHandler getServerHandler() {
-		return serverHandler;
-	}
-
 	public static boolean isClient() {
 		return client;
 	}

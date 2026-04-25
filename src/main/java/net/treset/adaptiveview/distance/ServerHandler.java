@@ -4,15 +4,14 @@ import net.minecraft.server.MinecraftServer;
 import net.treset.adaptiveview.AdaptiveViewMod;
 import net.treset.adaptiveview.config.Config;
 import net.treset.adaptiveview.config.ServerState;
-import net.treset.adaptiveview.tools.MathTools;
 import net.treset.adaptiveview.unlocking.LockManager;
 
 import java.util.*;
 
 public class ServerHandler {
-    private static final ArrayList<Long> tickLengths = new ArrayList<>();
+    private TickLengthBuffer tickLengths;
 
-    public static ArrayList<Long> getTickLengths() {
+    public TickLengthBuffer getTickLengths() {
         return tickLengths;
     }
 
@@ -29,6 +28,7 @@ public class ServerHandler {
         this.lockManager = lockManager;
         this.viewDistanceHandler = viewDistanceHandler;
         this.nextUpdate = config.getUpdateRate();
+        this.tickLengths = new TickLengthBuffer(config.getUpdateRate());
     }
 
 
@@ -44,14 +44,14 @@ public class ServerHandler {
             ServerState state = new ServerState(
                     ViewDistanceHandler.getViewDistance(),
                     ViewDistanceHandler.getSimDistance(),
-                    (double)MathTools.longArrayAverage(tickLengths.toArray(new Long[0])) / 1000000d,
+                    tickLengths.averageMillis(),
                     getMemory(),
                     getPlayers()
             );
 
             tickCounter = 0;
             nextUpdate = viewDistanceHandler.updateViewDistance(state);
-            tickLengths.clear();
+            tickLengths.reset();
         }
     }
 

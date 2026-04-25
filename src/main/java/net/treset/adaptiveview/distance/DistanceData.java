@@ -1,13 +1,12 @@
 package net.treset.adaptiveview.distance;
 
 import net.treset.adaptiveview.config.Rule;
-import net.treset.adaptiveview.tools.MathTools;
 
 import java.util.List;
 
 record DistanceData(int maxDistance, int minDistance, int updateRate, int step) {
     public int getTargetDistance(int currentDistance) {
-        return MathTools.clamp(currentDistance + step, minDistance, maxDistance);
+        return Math.clamp(currentDistance + step, minDistance, maxDistance);
     }
 
     public static DistanceData extract(List<Rule> rules, int defaultMax, int defaultMin) {

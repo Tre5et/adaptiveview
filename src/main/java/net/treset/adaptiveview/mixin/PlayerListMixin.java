@@ -10,30 +10,18 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.lang.annotation.Target;
 
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
-    @Shadow
-    @Final
-    private MinecraftServer server;
-
-    @Shadow
-    private int viewDistance;
-
-    @Shadow
-    public abstract void broadcastAll(Packet<?> packet);
-
-    @Inject(method = "setViewDistance",at = @At("HEAD"), cancellable = true)
-    public void setViewDistance(int viewDistance, CallbackInfo ci) {;
-        this.viewDistance = viewDistance;
-        // this.broadcastAll(new ClientboundSetChunkCacheRadiusPacket(viewDistance));
-
-        for(ServerLevel level : this.server.getAllLevels()) {
-            level.getChunkSource().setViewDistance(viewDistance);
-        }
-        ci.cancel();
-    }
+    // we just prevent the ClientboundSetChunkCacheRadiusPacket from being send to the players
+    @Redirect(method = "setViewDistance",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/server/players/PlayerList;broadcastAll(Lnet/minecraft/network/protocol/Packet;)V"
+            ))
+    public void redirectBroadcastAll(PlayerList instance, Packet<?> packet) {}
 }

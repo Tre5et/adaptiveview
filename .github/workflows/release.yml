@@ -1,33 +1,31 @@
-name: Release
-
-permissions:
-  contents: write
-
 on:
   release:
     types: [created]
+  workflow_dispatch:
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Java 25
-        uses: actions/setup-java@v5
+      - uses: actions/checkout@v7
+      - name: Set up JDK 25
+        uses: actions/setup-java@v6
         with:
-          distribution: temurin
-          java-version: "25"
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+          java-version: '25'
+          distribution: 'temurin'
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Build
-        run: ./gradlew build
+        run: gradle build
 
-      - name: Upload JAR to release
-        uses: softprops/action-gh-release@v3
+      - uses: Kir-Antipov/mc-publish@v3.3.1
         with:
-          tag_name: ${{ github.event.release.tag_name }}
-          files: build/libs/!(*-sources).jar
+
+          modrinth-id: xZvyOrQr
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: 649626
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
